@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ResearchCard from '../components/ResearchCard.astro';
+import { getCollection } from 'astro:content';
+
+const allResearch = await getCollection('research');
+const sorted = allResearch.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const categories = [
+  'All',
+  'Oral-Systemic Link',
+  'Health Literacy',
+  'Epidemiology',
+  'IISc Project',
+  'MOOC Development',
+  'Community Health',
+];
+
+const focusAreas = [
+  {
+    icon: '🦷',
+    title: 'Oral Health & Systemic Disease',
+    desc: 'Investigating the bidirectional link between oral health and non-communicable diseases, with focus on community oral health promotion.',
+  },
+  {
+    icon: '📱',
+    title: 'Digital Health Education & MOOCs',
+    desc: 'Designing and delivering evidence-based online learning programmes for frontline health workers across diverse geographic regions.',
+  },
+  {
+    icon: '🗺️',
+    title: 'Geospatial & Epidemiological Analysis',
+    desc: 'Using QGIS and spatial analytics to map disease incidence and inform targeted public health interventions.',
+  },
+  {
+    icon: '🌍',
+    title: 'Health Equity & Community Advocacy',
+    desc: 'Advancing health equity for vulnerable and underserved populations through participatory research and policy engagement.',
+  },
+  {
+    icon: '🧠',
+    title: 'Mental Health & Social Justice',
+    desc: 'Researching mental disability rights, social inclusion, and youth-centred mental health programme implementation.',
+  },
+];
+---
+
+<BaseLayout
+  title="Research"
+  description="Dr. Shivani Arun's research on oral health, MOOC development, geospatial epidemiology, community health, and mental health advocacy."
+>
+  <Nav slot="nav" />
+
+  <!-- Page header -->
+  <section class="bg-gradient-to-br from-teal-900 via-sky-900 to-slate-900 text-white py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-teal-300 text-sm font-semibold uppercase tracking-wider">Research</span>
+      <h1 class="text-4xl font-bold mt-2 mb-4">Research & Projects</h1>
+      <p class="text-slate-300 max-w-2xl">
+        Evidence-based research spanning oral health, digital health education, epidemiology, and
+        community health equity.
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+
+    <!-- Focus areas -->
+    <section>
+      <h2 class="text-2xl font-bold text-slate-900 mb-8">Research Focus Areas</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {focusAreas.map(({ icon, title, desc }) => (
+          <div class="bg-white border border-slate-200 rounded-2xl p-6 hover:border-teal-200 hover:shadow-md transition-all">
+            <div class="text-3xl mb-3">{icon}</div>
+            <h3 class="font-bold text-slate-900 mb-2">{title}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Research entries -->
+    <section>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-slate-900">Projects & Publications</h2>
+        <span class="text-sm text-slate-500">{sorted.length} entries</span>
+      </div>
+
+      <!-- Category filter (static labels — JS optional) -->
+      <div class="flex flex-wrap gap-2 mb-8" id="filter-btns">
+        {categories.map((cat) => (
+          <button
+            data-category={cat}
+            class:list={[
+              'px-3 py-1.5 rounded-lg text-sm font-medium transition-all border',
+              cat === 'All'
+                ? 'bg-teal-700 text-white border-teal-700'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-teal-400 hover:text-teal-700',
+            ]}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="research-grid">
+        {sorted.map((entry) => (
+          <div data-cat={entry.data.category}>
+            <ResearchCard
+              slug={entry.slug}
+              title={entry.data.title}
+              authors={entry.data.authors}
+              venue={entry.data.venue}
+              date={entry.data.date}
+              category={entry.data.category}
+              abstract={entry.data.abstract}
+              url={entry.data.url}
+              pdf={entry.data.pdf}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Add via CMS prompt -->
+    <section class="bg-slate-50 border border-slate-200 rounded-2xl p-8 text-center">
+      <div class="text-4xl mb-3">➕</div>
+      <h3 class="font-bold text-slate-900 mb-2">Add More Research via CMS</h3>
+      <p class="text-slate-600 text-sm mb-4">
+        Log in to the admin panel to add publications, projects, or working papers directly.
+      </p>
+      <a href="/admin/"
+         class="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-700 text-white rounded-xl text-sm font-semibold hover:bg-teal-800 transition-colors">
+        Open CMS Admin
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        </svg>
+      </a>
+    </section>
+
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('[data-category]');
+  const cards = document.querySelectorAll<HTMLDivElement>('[data-cat]');
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.category ?? 'All';
+
+      // Update active button style
+      btns.forEach((b) => {
+        const isActive = b.dataset.category === cat;
+        b.classList.toggle('bg-teal-700', isActive);
+        b.classList.toggle('text-white', isActive);
+        b.classList.toggle('border-teal-700', isActive);
+        b.classList.toggle('bg-white', !isActive);
+        b.classList.toggle('text-slate-600', !isActive);
+        b.classList.toggle('border-slate-200', !isActive);
+      });
+
+      // Filter cards
+      cards.forEach((card) => {
+        const show = cat === 'All' || card.dataset.cat === cat;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>
