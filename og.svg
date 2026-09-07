@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0F766E"/>
+      <stop offset="55%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="60" y="60" width="1080" height="510" rx="32" fill="white" opacity="0.08"/>
+  <text x="90" y="170" fill="#F8FAFC" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Dr. Shivani Arun</text>
+  <text x="90" y="240" fill="#E2F3F2" font-family="Arial, Helvetica, sans-serif" font-size="24">Dentist | Public Health Researcher &amp; Advocate</text>
+  <text x="90" y="330" fill="#F8FAFC" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="600">Senior Project Associate, Isaac Centre for Public Health, IISc</text>
+  <text x="90" y="390" fill="#E2F3F2" font-family="Arial, Helvetica, sans-serif" font-size="22">Oral health · Community health · Digital education · Health equity</text>
+</svg>
