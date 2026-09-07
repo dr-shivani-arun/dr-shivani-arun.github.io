@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://dr-shivani-arun.github.io',
+  base: '/',
   integrations: [tailwind(), sitemap()],
   output: 'static',
 });
