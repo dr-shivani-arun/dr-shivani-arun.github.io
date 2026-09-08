@@ -1,0 +1,224 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const education = [
+  {
+    degree: 'Masters in Public Health (MPH)',
+    field: 'Public Health',
+    institution: 'JSS University (Jagadguru Sri Shivarathreeshwara University), Mysore',
+    period: 'Oct 2023 – Oct 2025',
+    highlights: ['University Gold Medalist', 'Strong emphasis on epidemiology and community health'],
+  },
+  {
+    degree: 'Bachelor of Dental Surgery (BDS)',
+    field: 'Medicine',
+    institution: 'Rajiv Gandhi University of Health Sciences',
+    period: 'Oct 2016 – Dec 2021',
+    highlights: ['College Topper & Gold Medalist', 'Editor of college annual magazine', 'Core organiser of cultural events'],
+  },
+  {
+    degree: 'Post Graduate Diploma in Clinical Research & Data Management',
+    field: 'Clinical Research',
+    institution: 'Icbio',
+    period: 'Apr 2023 – Sep 2023',
+    highlights: [],
+  },
+  {
+    degree: 'Joint Social Entrepreneurship Program',
+    field: 'Social Entrepreneurship',
+    institution: 'University of Arkansas',
+    period: 'Feb 2025 – May 2025',
+    highlights: [],
+  },
+];
+
+const certifications = [
+  { name: 'Lifetime Membership — One Health Network of India', issuer: 'Public Health Foundation of India (PHFI)', date: 'Jul 2026' },
+  { name: 'Systemic Review and Meta Analysis', issuer: 'JSS Academy of Higher Education & Research', date: 'Apr 2026' },
+  { name: 'Research Methods in Health Promotion', issuer: '', date: '' },
+  { name: 'Research Methodology', issuer: '', date: '' },
+  { name: 'Palliative Care and Support', issuer: '', date: '' },
+  { name: 'Lifestyle Medicine and Food as Medicine Essentials', issuer: '', date: '' },
+];
+
+const skills = {
+  'Research & Analysis': ['Systematic Reviews', 'Meta-Analysis', 'Policy Analysis', 'Program Evaluation', 'Data Visualisation'],
+  'Technical Tools': ['SPSS', 'QGIS', 'ERDAS Imagine', 'NVivo', 'R Programming', 'MS Office'],
+  'Health Programs': ['MOOC Development', 'Curriculum Design', 'Community Health', 'Capacity Building'],
+  'Languages & Communication': ['Documentation', 'Scientific Writing', 'Stakeholder Engagement', 'Training & Education'],
+};
+---
+
+<BaseLayout
+  title="About"
+  description="About Dr. Shivani Arun — MPH Gold Medalist, Dentist, Public Health Researcher at IISc Bengaluru."
+>
+  <Nav slot="nav" />
+
+  <!-- Page header -->
+  <section class="bg-gradient-to-br from-teal-900 via-sky-900 to-slate-900 text-white py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-teal-300 text-sm font-semibold uppercase tracking-wider">About</span>
+      <h1 class="text-4xl font-bold mt-2 mb-4">Dr. Shivani Arun</h1>
+      <p class="text-slate-300 max-w-2xl text-lg">
+        Dentist · Public Health Researcher & Advocate · Health Educator & Promoter ·
+        Public Health & Policy Specialist · Clinical Research & Data Expert
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+
+    <!-- Bio -->
+    <section class="grid md:grid-cols-3 gap-10 items-start">
+      <div class="md:col-span-2 space-y-4 text-slate-700 leading-relaxed">
+        <h2 class="text-2xl font-bold text-slate-900">About Me</h2>
+        <p>
+          Accomplished public health professional and dentist with a Master of Public Health (MPH), recognised as a
+          university gold medalist. Experienced in designing, delivering, and coordinating MOOC and community health
+          initiatives for frontline health workers, reaching diverse populations with innovative, evidence-based oral
+          health solutions.
+        </p>
+        <p>
+          As a healthcare researcher, project coordinator, and content specialist, I have successfully managed
+          multi-institutional campaigns and authored impactful training materials, driving measurable improvements in
+          health outcomes. My clinical and patient-facing work is complemented by expertise in digital education
+          platforms, data-driven program evaluation, and community engagement. Proficient in SPSS, ERDAS Imagine,
+          QGIS, NVivo and curriculum development for online delivery.
+        </p>
+        <p>
+          Passionate about bridging knowledge gaps and supporting upskilling among frontline health workers, I aim
+          to advance health equity through accessible education.
+        </p>
+        <p>
+          Open to connecting for research collaborations, MOOC development, policy analysis projects or new
+          opportunities in health program coordination and innovation.
+        </p>
+      </div>
+
+      <!-- Quick info card -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4 text-sm">
+        <div class="flex justify-center mb-2">
+          <img src="/avatar.svg" alt="Dr. Shivani Arun" class="w-28 h-28 rounded-full border-4 border-white shadow-md"/>
+        </div>
+        {[
+          { icon: '📍', label: 'Greater Bengaluru Area, India' },
+          { icon: '🏥', label: 'IISc — Isaac Centre for Public Health' },
+          { icon: '🎓', label: 'MPH, BDS — University Gold Medalist' },
+          { icon: '🏆', label: 'Dr C L Sathish Babu Award' },
+          { icon: '✉️', label: 'drshivania07@gmail.com', href: 'mailto:drshivania07@gmail.com' },
+          { icon: '🔗', label: 'LinkedIn', href: 'https://www.linkedin.com/in/shivani-arun/' },
+        ].map(({ icon, label, href }) => (
+          <div class="flex items-start gap-3">
+            <span class="text-lg">{icon}</span>
+            {href
+              ? <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" class="text-teal-700 hover:underline">{label}</a>
+              : <span class="text-slate-700">{label}</span>
+            }
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section>
+      <h2 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 text-lg">🎓</span>
+        Education
+      </h2>
+      <div class="space-y-6">
+        {education.map(({ degree, field, institution, period, highlights }) => (
+          <div class="bg-white border border-slate-200 rounded-2xl p-6 hover:border-teal-200 hover:shadow-md transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
+              <div>
+                <h3 class="font-bold text-slate-900">{degree}</h3>
+                <p class="text-teal-700 font-medium text-sm">{field}</p>
+                <p class="text-slate-600 text-sm">{institution}</p>
+              </div>
+              <span class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full shrink-0 h-fit">{period}</span>
+            </div>
+            {highlights.length > 0 && (
+              <ul class="mt-3 space-y-1">
+                {highlights.map((h) => (
+                  <li class="text-sm text-slate-600 flex items-center gap-2">
+                    <svg class="w-3.5 h-3.5 text-teal-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section>
+      <h2 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center text-sky-700 text-lg">⚡</span>
+        Skills & Expertise
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-6">
+        {Object.entries(skills).map(([category, items]) => (
+          <div class="bg-white border border-slate-200 rounded-2xl p-5">
+            <h3 class="font-semibold text-slate-900 mb-3 text-sm uppercase tracking-wide">{category}</h3>
+            <div class="flex flex-wrap gap-2">
+              {items.map((skill) => (
+                <span class="px-2.5 py-1 text-sm bg-slate-100 text-slate-700 rounded-lg">{skill}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section>
+      <h2 class="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center text-amber-700 text-lg">📜</span>
+        Licences & Certifications
+      </h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {certifications.map(({ name, issuer, date }) => (
+          <div class="bg-white border border-slate-200 rounded-xl p-4 hover:border-teal-200 transition-colors">
+            <p class="font-medium text-slate-900 text-sm leading-snug">{name}</p>
+            {issuer && <p class="text-xs text-slate-500 mt-1">{issuer}</p>}
+            {date && <p class="text-xs text-teal-600 font-medium mt-1">{date}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Awards -->
+    <section class="bg-gradient-to-br from-teal-50 to-sky-50 rounded-3xl p-8 border border-teal-100">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+        <span class="text-2xl">🏆</span> Honours & Awards
+      </h2>
+      <div class="space-y-4">
+        {[
+          { award: 'Dr C L Sathish Babu Award', desc: 'Recognised for outstanding contribution in the field of dentistry and public health.' },
+          { award: 'University Gold Medal — MPH', desc: 'Awarded for academic excellence in Masters of Public Health at JSS University.' },
+          { award: 'College Topper & Gold Medal — BDS', desc: 'Graduated as college topper from Rajiv Gandhi University of Health Sciences.' },
+          { award: 'Lifetime Member — One Health Network of India', desc: 'Public Health Foundation of India (PHFI), Jul 2026.' },
+        ].map(({ award, desc }) => (
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0 border border-slate-200">
+              <span class="text-lg">🥇</span>
+            </div>
+            <div>
+              <p class="font-semibold text-slate-900">{award}</p>
+              <p class="text-sm text-slate-600">{desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>

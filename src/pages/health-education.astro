@@ -1,0 +1,321 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import HealthEducationCard from '../components/HealthEducationCard.astro';
+import { getCollection } from 'astro:content';
+
+const allModules = await getCollection('healthEducation');
+const sorted = allModules.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const categories = [
+  'All',
+  'Oral Health',
+  'Digital Health Literacy',
+  'NCD Prevention',
+  'Community Health',
+  'Mental Health',
+  'Health Policy',
+];
+
+const formats = [
+  'All Formats',
+  'Article',
+  'Video',
+  'Interactive',
+  'Course',
+  'Webinar',
+];
+
+const formatMap: Record<string, string> = {
+  'Article': 'article',
+  'Video': 'video',
+  'Interactive': 'interactive',
+  'Course': 'course',
+  'Webinar': 'webinar',
+};
+
+const focusAreas = [
+  {
+    icon: '🦷',
+    title: 'Oral Health Education',
+    desc: 'Evidence-based modules on oral health assessment, prevention, and community oral health promotion.',
+  },
+  {
+    icon: '📱',
+    title: 'Digital Health Literacy',
+    desc: 'Training on digital health tools, telemedicine platforms, and mobile health applications for frontline workers.',
+  },
+  {
+    icon: '🌡️',
+    title: 'NCD Prevention',
+    desc: 'Screening, early detection, and lifestyle intervention strategies for diabetes, hypertension, and cardiovascular disease.',
+  },
+  {
+    icon: '🌍',
+    title: 'Community Health',
+    desc: 'Comprehensive training programs for community health workers covering communication, clinical procedures, and engagement.',
+  },
+  {
+    icon: '🧠',
+    title: 'Mental Health Support',
+    desc: 'Recognising mental health distress, providing initial support, and connecting community members to appropriate care.',
+  },
+  {
+    icon: '📋',
+    title: 'Health Policy & Advocacy',
+    desc: 'Understanding health policy frameworks, evidence-to-policy translation, and advocacy strategies for health system improvement.',
+  },
+];
+
+const formatCounts = sorted.reduce((acc, mod) => {
+  const f = mod.data.format;
+  acc[f] = (acc[f] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+// JSON-LD structured data for SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Health Education Modules by Dr. Shivani Arun",
+  "description": "Evidence-based health education modules, courses, and resources for frontline health workers.",
+  "itemListElement": sorted.map((mod, index) => ({
+    "@type": "LearningResource",
+    "position": index + 1,
+    "name": mod.data.title,
+    "description": mod.data.description,
+    "dateCreated": mod.data.date.toISOString().split('T')[0],
+    "educationalLevel": mod.data.difficulty || "Not specified",
+    "teaches": mod.data.category,
+    "learningResourceType": mod.data.format,
+    "timeRequired": mod.data.duration,
+    "audience": mod.data.targetAudience,
+    "url": mod.data.url || `https://dr-shivani-arun.github.io/health-education#${mod.slug}`,
+  })),
+};
+---
+
+<BaseLayout
+  title="Health Education"
+  description="Evidence-based health education modules, courses, and resources for frontline health workers. Covering oral health, digital health literacy, NCD prevention, community health, mental health, and health policy."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+  <Nav slot="nav" />
+
+  <!-- Page header -->
+  <section class="bg-gradient-to-br from-teal-900 via-sky-900 to-slate-900 text-white py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-teal-300 text-sm font-semibold uppercase tracking-wider">Health Education</span>
+      <h1 class="text-4xl font-bold mt-2 mb-4">Learning Resources & Modules</h1>
+      <p class="text-slate-300 max-w-2xl">
+        Evidence-based health education modules, interactive courses, and training resources designed for
+        frontline health workers and community health professionals. Covering oral health, digital health
+        literacy, NCD prevention, mental health, and health policy.
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+
+    <!-- Focus areas -->
+    <section>
+      <h2 class="text-2xl font-bold text-slate-900 mb-8">Education Focus Areas</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {focusAreas.map(({ icon, title, desc }) => (
+          <div class="bg-white border border-slate-200 rounded-2xl p-6 hover:border-teal-200 hover:shadow-md transition-all">
+            <div class="text-3xl mb-3">{icon}</div>
+            <h3 class="font-bold text-slate-900 mb-2">{title}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Stats bar -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-6">
+      <div class="flex flex-wrap items-center gap-6 text-sm">
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-slate-900">{sorted.length}</span>
+          <span class="text-slate-500">Total Modules</span>
+        </div>
+        {formats.slice(1).map((fmt) => {
+          const key = formatMap[fmt];
+          const count = formatCounts[key] || 0;
+          return (
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-slate-900">{count}</span>
+              <span class="text-slate-500">{fmt}s</span>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-slate-900">All Modules</h2>
+        <span class="text-sm text-slate-500" id="module-count">{sorted.length} modules</span>
+      </div>
+
+      <!-- Search -->
+      <div class="mb-6">
+        <div class="relative">
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Search modules by title or description..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none transition-all text-sm"
+          />
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 017.5 7.5z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Category filter -->
+      <div class="flex flex-wrap gap-2 mb-4" id="category-btns">
+        {categories.map((cat) => (
+          <button
+            data-category={cat}
+            class:list={[
+              'px-3 py-1.5 rounded-lg text-sm font-medium transition-all border',
+              cat === 'All'
+                ? 'bg-teal-700 text-white border-teal-700'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-teal-400 hover:text-teal-700',
+            ]}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Format filter -->
+      <div class="flex flex-wrap gap-2" id="format-btns">
+        {formats.map((fmt) => (
+          <button
+            data-format={fmt === 'All Formats' ? 'All' : formatMap[fmt]}
+            class:list={[
+              'px-3 py-1.5 rounded-lg text-sm font-medium transition-all border',
+              fmt === 'All Formats'
+                ? 'bg-sky-700 text-white border-sky-700'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-sky-400 hover:text-sky-700',
+            ]}
+          >
+            {fmt}
+          </button>
+        ))}
+      </div>
+    </section>
+
+    <!-- Module grid -->
+    <section>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="module-grid">
+        {sorted.map((mod) => (
+          <div
+            data-cat={mod.data.category}
+            data-format={mod.data.format}
+            data-title={mod.data.title.toLowerCase()}
+            data-desc={mod.data.description.toLowerCase()}
+          >
+            <HealthEducationCard
+              slug={mod.slug}
+              title={mod.data.title}
+              description={mod.data.description}
+              date={mod.data.date}
+              category={mod.data.category}
+              format={mod.data.format}
+              duration={mod.data.duration}
+              difficulty={mod.data.difficulty}
+              targetAudience={mod.data.targetAudience}
+              cover={mod.data.cover}
+              url={mod.data.url}
+            />
+          </div>
+        ))}
+      </div>
+
+      <!-- Empty state -->
+      <div id="empty-state" class="hidden text-center py-16">
+        <div class="text-5xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-slate-900 mb-2">No modules found</h3>
+        <p class="text-slate-500">Try adjusting your search or filter criteria.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<script>
+  const catBtns = document.querySelectorAll<HTMLButtonElement>('[data-category]');
+  const fmtBtns = document.querySelectorAll<HTMLButtonElement>('[data-format]');
+  const cards = document.querySelectorAll<HTMLDivElement>('[data-cat]');
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const moduleCount = document.getElementById('module-count');
+  const emptyState = document.getElementById('empty-state');
+
+  let activeCategory = 'All';
+  let activeFormat = 'All';
+  let searchTerm = '';
+
+  function updateActiveBtn(btns: NodeListOf<HTMLButtonElement>, activeValue: string, group: string) {
+    btns.forEach((btn) => {
+      const isActive = btn.dataset[group] === activeValue;
+      const isAll = activeValue === 'All';
+      if (group === 'category') {
+        btn.classList.toggle('bg-teal-700', isActive);
+        btn.classList.toggle('text-white', isActive);
+        btn.classList.toggle('border-teal-700', isActive);
+        btn.classList.toggle('bg-white', !isActive);
+        btn.classList.toggle('text-slate-600', !isActive);
+        btn.classList.toggle('border-slate-200', !isActive);
+      } else {
+        btn.classList.toggle('bg-sky-700', isActive);
+        btn.classList.toggle('text-white', isActive);
+        btn.classList.toggle('border-sky-700', isActive);
+        btn.classList.toggle('bg-white', !isActive);
+        btn.classList.toggle('text-slate-600', !isActive);
+        btn.classList.toggle('border-slate-200', !isActive);
+      }
+    });
+  }
+
+  function filter() {
+    let visible = 0;
+    cards.forEach((card) => {
+      const catMatch = activeCategory === 'All' || card.dataset.cat === activeCategory;
+      const fmtMatch = activeFormat === 'All' || card.dataset.format === activeFormat;
+      const titleMatch = card.dataset.title?.includes(searchTerm) ?? false;
+      const descMatch = card.dataset.desc?.includes(searchTerm) ?? false;
+      const show = catMatch && fmtMatch && (searchTerm === '' || titleMatch || descMatch);
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    moduleCount.textContent = `${visible} module${visible !== 1 ? 's' : ''}`;
+    emptyState.classList.toggle('hidden', visible > 0);
+  }
+
+  catBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.category ?? 'All';
+      updateActiveBtn(catBtns, activeCategory, 'category');
+      filter();
+    });
+  });
+
+  fmtBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeFormat = btn.dataset.format ?? 'All';
+      updateActiveBtn(fmtBtns, activeFormat, 'format');
+      filter();
+    });
+  });
+
+  searchInput?.addEventListener('input', (e) => {
+    searchTerm = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    filter();
+  });
+</script>

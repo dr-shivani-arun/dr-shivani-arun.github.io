@@ -1,0 +1,9 @@
+---
+# This is a static file, not a page
+---
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin
+
+Sitemap: https://dr-shivani-arun.github.io/sitemap-index.xml

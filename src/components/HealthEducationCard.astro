@@ -1,0 +1,116 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  category: string;
+  format: string;
+  duration?: string;
+  difficulty?: string;
+  targetAudience?: string;
+  cover?: string;
+  url?: string;
+  slug: string;
+}
+
+const { title, description, date, category, format, duration, difficulty, targetAudience, cover, url, slug } = Astro.props;
+
+const categoryColors: Record<string, string> = {
+  'Oral Health':             'bg-teal-100 text-teal-800',
+  'Digital Health Literacy': 'bg-sky-100 text-sky-800',
+  'NCD Prevention':          'bg-indigo-100 text-indigo-800',
+  'Community Health':        'bg-emerald-100 text-emerald-800',
+  'Mental Health':           'bg-violet-100 text-violet-800',
+  'Health Policy':           'bg-amber-100 text-amber-800',
+};
+
+const formatIcons: Record<string, string> = {
+  'article':      '📄',
+  'video':        '🎥',
+  'interactive':  '🎮',
+  'course':       '📚',
+  'webinar':      '📡',
+};
+
+const formatLabels: Record<string, string> = {
+  'article':      'Article',
+  'video':        'Video',
+  'interactive':  'Interactive',
+  'course':       'Course',
+  'webinar':      'Webinar',
+};
+
+const difficultyColors: Record<string, string> = {
+  'Beginner':     'bg-emerald-100 text-emerald-800',
+  'Intermediate': 'bg-amber-100 text-amber-800',
+  'Advanced':     'bg-rose-100 text-rose-800',
+};
+
+const badgeClass = categoryColors[category] ?? 'bg-slate-100 text-slate-700';
+const formatIcon = formatIcons[format] ?? '📄';
+const formatLabel = formatLabels[format] ?? format;
+const diffClass = difficulty ? (difficultyColors[difficulty] ?? 'bg-slate-100 text-slate-700') : '';
+const year = date.getFullYear();
+---
+
+<article class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-teal-200 transition-all duration-300 flex flex-col">
+  <!-- Cover image -->
+  <div class="relative h-40 overflow-hidden bg-gradient-to-br from-teal-700 via-sky-600 to-slate-800">
+    <img
+      src={cover || '/placeholders/research-cover-placeholder.svg'}
+      alt={`Cover for ${title}`}
+      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      loading="lazy"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+    <span class:list={['absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full', badgeClass]}>
+      {category}
+    </span>
+    <span class="absolute top-3 right-3 text-xs text-white/90 bg-black/25 backdrop-blur px-2 py-1 rounded-full font-medium flex items-center gap-1">
+      <span>{formatIcon}</span>
+      {year}
+    </span>
+  </div>
+
+  <!-- Content -->
+  <div class="p-6 flex flex-col gap-3 flex-1">
+    <h3 class="font-semibold text-slate-900 leading-snug text-base">{title}</h3>
+
+    <p class="text-sm text-slate-600 leading-relaxed line-clamp-3">{description}</p>
+
+    <!-- Meta row -->
+    <div class="flex flex-wrap gap-2 mt-1">
+      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
+        {formatIcon} {formatLabel}
+      </span>
+      {duration && (
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700">
+          ⏱ {duration}
+        </span>
+      )}
+      {difficulty && (
+        <span class:list={['inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium', diffClass]}>
+          {difficulty}
+        </span>
+      )}
+    </div>
+
+    {targetAudience && (
+      <p class="text-xs text-slate-500">
+        <span class="font-medium">Audience:</span> {targetAudience}
+      </p>
+    )}
+
+    {url && (
+      <div class="mt-auto pt-2">
+        <a href={url} target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-1.5 text-sm font-medium text-teal-700 hover:text-teal-800 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0 0L10 14"/>
+          </svg>
+          Access Module
+        </a>
+      </div>
+    )}
+  </div>
+</article>

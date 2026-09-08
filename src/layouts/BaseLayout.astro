@@ -1,0 +1,84 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = 'Dr. Shivani Arun',
+  description = 'Dentist · Public Health Researcher · Health Educator & Advocate · IISc Bengaluru',
+  ogImage = '/og.svg',
+} = Astro.props;
+
+const siteUrl = 'https://dr-shivani-arun.github.io';
+const fullTitle = title === 'Dr. Shivani Arun' ? title : `${title} — Dr. Shivani Arun`;
+const canonicalUrl = `${siteUrl}${Astro.url.pathname}`;
+---
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Dr. Shivani Arun" />
+    <meta name="keywords" content="Dr. Shivani Arun, public health, oral health, health education, MOOC, community health, epidemiology, mental health, health policy, IISc Bengaluru, research, dentist" />
+    <meta name="theme-color" content="#0f766e" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Dr. Shivani Arun" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+
+    <!-- JSON-LD Structured Data: Person -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Dr. Shivani Arun",
+      "url": siteUrl,
+      "sameAs": [
+        "https://www.linkedin.com/in/shivani-arun/",
+        "mailto:drshivania07@gmail.com"
+      ],
+      "jobTitle": "Public Health Researcher",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Indian Institute of Science (IISc) Bengaluru"
+      },
+      "knowsAbout": [
+        "Oral Health",
+        "Digital Health Education",
+        "Community Health",
+        "Epidemiology",
+        "Mental Health",
+        "Health Policy",
+        "MOOC Development"
+      ]
+    })}></script>
+
+    <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <slot name="nav" />
+    <main>
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

@@ -1,0 +1,82 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/assets
+public_folder: /assets
+
+collections:
+  - name: research
+    label: Research / Projects
+    folder: src/content/research
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Authors, name: authors, widget: list }
+      - { label: Venue, name: venue, widget: string, required: false }
+      - { label: Date, name: date, widget: datetime }
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - Oral-Systemic Link
+          - Health Literacy
+          - Epidemiology
+          - IISc Project
+          - MOOC Development
+          - Community Health
+      - { label: Abstract, name: abstract, widget: text, required: false }
+      - label: Cover Image
+        name: cover
+        widget: image
+        media_folder: assets/research
+        required: false
+        hint: "Optional cover image for this research card. Leave blank to use the default placeholder."
+      - { label: Paper URL, name: url, widget: string, required: false }
+      - { label: PDF Link, name: pdf, widget: string, required: false }
+  - name: healthEducation
+    label: Health Education
+    folder: src/content/healthEducation
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text }
+      - { label: Date, name: date, widget: datetime }
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - Oral Health
+          - Digital Health Literacy
+          - NCD Prevention
+          - Community Health
+          - Mental Health
+          - Health Policy
+      - label: Format
+        name: format
+        widget: select
+        options:
+          - article
+          - video
+          - interactive
+          - course
+          - webinar
+      - { label: Duration, name: duration, widget: string, required: false, hint: "e.g. '4 hours', '2.5 hours'" }
+      - label: Difficulty
+        name: difficulty
+        widget: select
+        required: false
+        options:
+          - Beginner
+          - Intermediate
+          - Advanced
+      - { label: Target Audience, name: targetAudience, widget: string, required: false }
+      - label: Cover Image
+        name: cover
+        widget: image
+        media_folder: assets/health-education
+        required: false
+        hint: "Optional cover image for this module. Leave blank to use the default placeholder."
+      - { label: Module URL, name: url, widget: string, required: false }
